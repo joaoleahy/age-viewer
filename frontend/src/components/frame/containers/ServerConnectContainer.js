@@ -17,28 +17,40 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { connectToDatabase } from '../../../features/database/DatabaseSlice';
-import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 import {
   addFrame, pinFrame, removeFrame, trimFrame,
 } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import ServerConnectFrame from '../presentations/ServerConnectFrame';
 
-const mapStateToProps = (state) => ({
-  currentGraph: state.metadata.currentGraph,
-});
+const ServerConnectFrameContainer = () => {
+  const dispatch = useDispatch();
+  const currentGraph = useSelector(state => state.metadata.currentGraph);
 
-const mapDispatchToProps = {
-  connectToDatabase,
-  addFrame,
-  trimFrame,
-  removeFrame,
-  pinFrame,
-  addAlert,
-  getMetaData,
-  /* getMetaChartData, */
+  const handleConnectToDatabase = () => dispatch(connectToDatabase());
+  const handleAddFrame = () => dispatch(addFrame());
+  const handleTrimFrame = () => dispatch(trimFrame());
+  const handleRemoveFrame = () => dispatch(removeFrame());
+  const handlePinFrame = () => dispatch(pinFrame());
+  const handleAddAlert = () => dispatch(addAlert());
+  const handleGetMetaData = () => dispatch(getMetaData());
+
+  return (
+    <ServerConnectFrame
+      currentGraph={currentGraph}
+      onConnectToDatabase={handleConnectToDatabase}
+      onAddFrame={handleAddFrame}
+      onTrimFrame={handleTrimFrame}
+      onRemoveFrame={handleRemoveFrame}
+      onPinFrame={handlePinFrame}
+      onAddAlert={handleAddAlert}
+      onGetMetaData={handleGetMetaData}
+    />
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerConnectFrame);
+export default ServerConnectFrameContainer;
+
